@@ -1,4 +1,3 @@
-
 package codigo;
 
 import java.awt.Color;
@@ -12,136 +11,131 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class Ventana extends JFrame{
     private JPanel panel;
     private JLabel etiqueta;
     private JButton botonRojo, botonVerde, botonAzul;
-    private int pulsado = 0;
-    private int contadorRojo = 0, contadorVerde = 0, contadorAzul = 0;
+    private int pulsador = 0;
+    private int contRojo=0, contVerde=0, contAzul=0;
     
     public Ventana(){
         setSize(600,400);
-        setTitle("Juego Colores");
+        setTitle("Juego de colores");
         setLocationRelativeTo(null);
         
         iniciarComponentes();
-                
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
     }
     private void iniciarComponentes(){
-        colocarPanel();
-        colocarEtiqueta();
-        colocarBotones();
+        cuadrarPanel();
+        cuadrarEtiqueta();
+        cuadrarBotones();
+        
     }
-    
-    private void colocarPanel(){
+    private void cuadrarPanel(){
+        
         panel = new JPanel();
         panel.setLayout(null);
         this.add(panel);
         
-        eventoDeRuedaDeRaton();
+        ruedaRaton();
+        
+        
     }
-    
-    private void colocarEtiqueta(){
+    private void cuadrarEtiqueta(){
         etiqueta = new JLabel("Color (Rojo, Verde, Azul)");
-        etiqueta.setBounds(100,30, 400, 50);
-        etiqueta.setFont(new Font("arial", 0,20));
+        etiqueta.setBounds(100, 30, 400, 50);
+        etiqueta.setFont(new Font("arial",0,20));
         etiqueta.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(etiqueta);
-    }
-    
-    private void colocarBotones(){
-        /*
-            pulsado = 1 -> botonRojo
-            pulsado = 2 -> botonVerde
-            pulsado = 3 -> botonAzul
-        */
         
+    }
+    private void cuadrarBotones(){
+        
+        /*
+        pulsador = 1 -> botonRojo
+        pulsador = 2 -> botonVerde
+        pulsador = 3 -> botonAzul
+        */
         botonRojo = new JButton("Rojo");
         botonRojo.setBounds(50, 230, 130, 50);
         botonRojo.setForeground(Color.red);
-        botonRojo.setFont(new Font("arial rounded mt bold", 0, 20));
+        botonRojo.setFont(new Font("arial rounded mt bold",0,20));
         panel.add(botonRojo);
-        
         botonRojo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pulsado = 1;
+                pulsador = 1;
+                
             }
-        } );
+        });
         
         botonVerde = new JButton("Verde");
         botonVerde.setBounds(230, 230, 130, 50);
         botonVerde.setForeground(Color.green);
-        botonVerde.setFont(new Font("arial rounded mt bold", 0, 20));
+        botonVerde.setFont(new Font("arial rounded mt bold",0,20));
         panel.add(botonVerde);
-        
         botonVerde.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pulsado = 2;
+                pulsador = 2;
             }
-        } );
+        });
         
         botonAzul = new JButton("Azul");
         botonAzul.setBounds(410, 230, 130, 50);
         botonAzul.setForeground(Color.blue);
-        botonAzul.setFont(new Font("arial rounded mt bold", 0, 20));
+        botonAzul.setFont(new Font("arial rounded mt bold",0,20));
         panel.add(botonAzul);
-        
         botonAzul.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pulsado = 3;
+                pulsador = 3;
             }
-        } );
+        });
         
     }
-    
-    private void eventoDeRuedaDeRaton(){
-        MouseWheelListener eventoRueda = new MouseWheelListener() {
+    private void ruedaRaton(){
+        MouseWheelListener rueda = new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if(pulsado != 0){//Si se ha pulsado algun boton
-                    if(pulsado == 1){//Se ha pulsado el botonRojo
-                        contadorRojo+= e.getWheelRotation();
-                        if(contadorRojo < 0){
-                            contadorRojo = 0;
-                        }
-                        if(contadorRojo > 255){
-                            contadorRojo = 255;
-                        }
+                if(pulsador != 0){ // Si se ha pulsado algun boton
+                    switch (pulsador) {
+                        case 1:
+                            //Se ha pulsado el botonRojo
+                            contRojo += e.getWheelRotation();
+                            if(contRojo < 0){
+                                contRojo = 0;
+                            }   if(contRojo > 255){
+                                contRojo = 255;
+                            }   break;
+                        case 2:
+                            //Se ha pulsado el botonVerde
+                            contVerde += e.getWheelRotation();
+                            if(contVerde < 0){
+                                contVerde = 0;
+                            }   if(contVerde > 255){
+                                contVerde = 255;
+                            }   break;
+                        default:
+                            //Se ha pulsado el botonAzul
+                            contAzul += e.getWheelRotation();
+                            if(contAzul < 0){
+                                contAzul = 0;
+                            }   if(contAzul > 255){
+                                contAzul = 255;
+                            }   break;
                     }
-                    else if(pulsado ==2){//Se ha pulsado el botonVerde
-                        contadorVerde+= e.getWheelRotation();
-                        if(contadorVerde < 0){
-                            contadorVerde = 0;
-                        }
-                        if(contadorVerde > 255){
-                            contadorVerde = 255;
-                        }
-                    }
-                    else{//Se ha pulsado el botonAzul
-                        contadorAzul+= e.getWheelRotation();
-                        if(contadorAzul < 0){
-                            contadorAzul = 0;
-                        }
-                        if(contadorAzul > 255){
-                            contadorAzul = 255;
-                        }
-                    }
+                    
                 }
-                etiqueta.setText("Color (Rojo ="+contadorRojo+", Verde ="+contadorVerde+", Azul= "+contadorAzul+")");
-                panel.setBackground(new Color(contadorRojo, contadorVerde, contadorAzul));
+                etiqueta.setText("Color (Rojo = "+contRojo+", Verde = "+contVerde+", Azul = "+contAzul);
+                panel.setBackground(new Color(contRojo, contVerde,contAzul));                
             }
         };
-      
-       panel.addMouseWheelListener(eventoRueda);
-        
+        panel.addMouseWheelListener(rueda);
     }
-   
-  }
-
+}
